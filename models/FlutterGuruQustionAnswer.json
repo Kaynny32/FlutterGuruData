@@ -4,15 +4,141 @@
       "id": "1",
       "category": "Основы Dart",
       "question": "В чем разница между 'final' и 'const' в Dart?",
-      "answer": "Ключевые отличия:\n1. Время инициализации:\n   - 'final' - значение устанавливается во время ВЫПОЛНЕНИЯ программы (runtime), один раз\n   - 'const' - значение известно во время КОМПИЛЯЦИИ (compile-time)\n\n2. Область применения:\n   - 'final' можно использовать для переменных, которые зависят от runtime-логики\n   - 'const' создает compile-time константы, которые вычисляются при компиляции\n\n3. Производительность:\n   - 'const' обеспечивает лучшую производительность, так как значение вычисляется один раз при компиляции\n   - Объекты 'const' канонизируются - одинаковые константы ссылаются на один объект в памяти\n\nПримеры:\n// final - runtime инициализация\nfinal currentTime = DateTime.now(); // OK\nfinal list = [1, 2, 3]; // OK\n\n// const - compile-time инициализация\nconst pi = 3.14159; // OK\nconst defaultTimeout = 3000; // OK\nconst currentTime = DateTime.now(); // ERROR - нельзя использовать runtime значение\n\n// const коллекции\nconst constList = [1, 2, 3]; // Все элементы должны быть константами\nfinal finalList = [1, 2, 3]; // Можно менять содержимое, но не переприсваивать",
-      "hint": "final = runtime, const = compile-time, const для производительности"
+      "answer": "'final' - значение устанавливается в RUNTIME и не меняется. 'const' - значение известно в COMPILE-TIME и является константой.\n\nПримеры:\nfinal time = DateTime.now(); // OK - runtime значение\nconst pi = 3.14; // OK - compile-time значение\nconst time = DateTime.now(); // ERROR! - нельзя использовать runtime значение",
+      "hint": "final = runtime, const = compile-time"
     },
     {
       "id": "2",
       "category": "Основы Dart",
       "question": "Что такое Null Safety в Dart?",
-      "answer": "Null Safety - это система типов, которая предотвращает ошибки обращения к null (Null Reference Exceptions). Введена в Dart 2.12.\n\nОсновные концепции:\n1. Non-nullable по умолчанию: все типы по умолчанию не могут содержать null\n2. Nullable типы: для разрешения null добавляется '?' после типа\n3. Sound null safety: гарантия на уровне компиляции, что non-nullable переменные никогда не содержат null\n\nОператоры:\n- '?' - nullable тип: String? name;\n- '!' - null assertion operator: name!.length (утверждаем, что не null)\n- '??' - null coalescing: value ?? defaultValue\n- '?.' - conditional access: user?.profile?.name\n- 'late' - отложенная инициализация (обещаем инициализировать позже)\n\nПримеры:\n// Non-nullable (по умолчанию)\nString name = 'John'; // ОК\nname = null; // Ошибка компиляции!\n\n// Nullable тип\nString? nullableName = null; // ОК\nnullableName = 'Jane'; // ОК\n\n// Операторы работы с nullable\nint length = nullableName?.length ?? 0; // Безопасный доступ\nString upper = nullableName!.toUpperCase(); // Assertion (опасно!)\n\n// Late инициализация\nlate String lateName;\nvoid initialize() { lateName = 'Initialized'; }",
-      "hint": "Типы non-nullable по умолчанию, ? для nullable, sound null safety"
+      "answer": "Null Safety - система типов, предотвращающая ошибки null reference. Все типы по умолчанию non-nullable. Для nullable типа добавляется '?'. Используются null-aware операторы (??, ?., !).\n\nПример:\nString name = 'John'; // non-nullable\nString? nullableName = null; // nullable\nint length = nullableName?.length ?? 0; // безопасный доступ",
+      "hint": "Типы non-nullable по умолчанию, ? для nullable"
+    },
+    {
+      "id": "3",
+      "category": "Основы Dart",
+      "question": "Какие коллекции есть в Dart?",
+      "answer": "1. List - упорядоченная коллекция с индексами (важен порядок)\n2. Set - неупорядоченная коллекция уникальных элементов (важна уникальность)\n3. Map - коллекция пар ключ-значение (ассоциативный массив)\n\nВсе могут быть фиксированной длины или growable.",
+      "hint": "List - порядок, Set - уникальность, Map - ключ-значение"
+    },
+    {
+      "id": "4",
+      "category": "Основы Flutter",
+      "question": "В чем разница между StatelessWidget и StatefulWidget?",
+      "answer": "StatelessWidget - неизменяемый виджет без внутреннего состояния. StatefulWidget - виджет с изменяемым состоянием, использует setState() для обновления UI.\n\nStatelessWidget: только build() метод, легковесный.\nStatefulWidget: имеет объект State, может менять состояние.",
+      "hint": "Stateless - без состояния, Stateful - с состоянием"
+    },
+    {
+      "id": "5",
+      "category": "Основы Flutter",
+      "question": "Расскажите про жизненный цикл StatefulWidget",
+      "answer": "1. createState() - создание State\n2. initState() - инициализация (1 раз)\n3. didChangeDependencies() - при изменении InheritedWidget\n4. build() - построение UI (много раз)\n5. didUpdateWidget() - при обновлении виджета\n6. setState() - триггер перерисовки\n7. deactivate() - удаление из дерева\n8. dispose() - окончательное удаление, очистка",
+      "hint": "initState → build → [много раз build] → dispose"
+    },
+    {
+      "id": "6",
+      "category": "State Management",
+      "question": "Когда использовать Provider, а когда BloC/Cubit?",
+      "answer": "Provider - для простого состояния и dependency injection (тема, настройки).\n\nBloc/Cubit - для сложной бизнес-логики, когда нужны события, тестирование, отслеживание состояния (аутентификация, корзина).\n\nCubit - упрощенный BloC без событий.",
+      "hint": "Provider - простое, BloC - сложная логика"
+    },
+    {
+      "id": "7",
+      "category": "State Management",
+      "question": "Что такое Riverpod и чем он лучше Provider?",
+      "answer": "Riverpod - современная замена Provider. Преимущества:\n1. Compile-safe (ошибки на этапе компиляции)\n2. Не зависит от BuildContext\n3. Легкое тестирование\n4. Несколько провайдеров одного типа\n5. Автоматическое кэширование\n6. Лучшая производительность\n\nНедостаток: крутая кривая обучения.",
+      "hint": "Riverpod = Provider 2.0, compile-safe, не зависит от context"
+    },
+    {
+      "id": "8",
+      "category": "Асинхронность",
+      "question": "Разница между Future и Stream?",
+      "answer": "Future - возвращает одно значение в будущем (запрос к API, чтение файла).\n\nStream - возвращает последовательность значений во времени (websocket, геолокация, user events).\n\nasync/await - для работы с Future в синхронном стиле.",
+      "hint": "Future - одно значение, Stream - много значений"
+    },
+    {
+      "id": "9",
+      "category": "Асинхронность",
+      "question": "Что такое Isolate и когда его использовать?",
+      "answer": "Isolate - отдельный поток выполнения со своей памятью. Общение только через сообщения.\n\nИспользовать для:\n1. Тяжелых вычислений (обработка изображений)\n2. Сложных математических расчетов\n3. Операций, блокирующих UI (>16мс)\n4. Фоновых задач\n\nНе использовать для простых async операций.",
+      "hint": "Isolate = отдельный поток, общение через сообщения"
+    },
+    {
+      "id": "10",
+      "category": "Навигация",
+      "question": "Как работает навигация в Flutter?",
+      "answer": "Навигация работает через стек (LIFO) с помощью Navigator:\n1. Navigator управляет стеком маршрутов\n2. push() - добавляет маршрут\n3. pop() - удаляет маршрут\n4. pushReplacement() - заменяет маршрут\n\nПодходы:\n- Именованные маршруты (через MaterialApp.routes)\n- Анонимные маршруты (через Navigator.push)",
+      "hint": "Navigator управляет стеком маршрутов, push/pop для навигации"
+    },
+    {
+      "id": "11",
+      "category": "Производительность",
+      "question": "Как оптимизировать производительность Flutter приложения?",
+      "answer": "1. Используйте const везде где возможно\n2. ListView.builder вместо Column с детьми\n3. Кэширование изображений (cached_network_image)\n4. Оптимизация build() методов\n5. Профилирование с DevTools\n6. Избегайте setState() в больших деревьях\n7. Используйте RepaintBoundary\n8. Используйте Keys для списков\n9. Оптимизация анимаций\n10. Используйте Isolates для тяжелых вычислений",
+      "hint": "const, ListView.builder, DevTools для профилирования"
+    },
+    {
+      "id": "12",
+      "category": "API и сеть",
+      "question": "Разница между GET и POST запросами?",
+      "answer": "GET - получение данных с сервера. Параметры в URL, кэшируется, не должен менять состояние сервера.\n\nPOST - отправка данных на сервер для создания/обновления. Данные в теле запроса, не кэшируется, нет ограничений по объему.",
+      "hint": "GET - получение, POST - отправка данных"
+    },
+    {
+      "id": "13",
+      "category": "API и сеть",
+      "question": "Что такое REST API?",
+      "answer": "REST API - архитектурный стиль, где сущности представлены как ресурсы (URL).\n\nОсновные методы HTTP:\n- GET - получение\n- POST - создание\n- PUT/PATCH - обновление\n- DELETE - удаление\n- HEAD, OPTIONS - служебные",
+      "hint": "REST - ресурсы как URL, CRUD операции через HTTP"
+    },
+    {
+      "id": "14",
+      "category": "Базы данных",
+      "question": "Почему выбрать Isar, а не Hive или SQLite?",
+      "answer": "Isar:\n- Нативная производительность (написана на C++)\n- Встроенные индексы\n- Богатые типы запросов\n- Интеграция с Flutter DevTools\n\nHive - очень быстрый, но менее удобная работа с отношениями.\nSQLite - проверенное решение, но больше boilerplate кода.",
+      "hint": "Isar - нативная производительность, индексы, DevTools интеграция"
+    },
+    {
+      "id": "15",
+      "category": "Архитектура",
+      "question": "Объясните принципы SOLID",
+      "answer": "SOLID - принципы объектно-ориентированного проектирования:\n1. S - Single Responsibility (одна ответственность)\n2. O - Open/Closed (открыт для расширения, закрыт для модификации)\n3. L - Liskov Substitution (наследники заменяют родителей)\n4. I - Interface Segregation (много специализированных интерфейсов)\n5. D - Dependency Inversion (зависимости от абстракций)",
+      "hint": "S - одна ответственность, O - открыт/закрыт, L - подстановка, I - разделение, D - инверсия"
+    },
+    {
+      "id": "16",
+      "category": "ООП в Dart",
+      "question": "Какие принципы ООП поддерживает Dart?",
+      "answer": "Dart поддерживает все 4 принципа ООП:\n1. Инкапсуляция - private поля через _\n2. Наследование - extends (одиночное наследование)\n3. Полиморфизм - переопределение методов\n4. Абстракция - абстрактные классы, интерфейсы",
+      "hint": "Инкапсуляция, наследование, полиморфизм, абстракция"
+    },
+    {
+      "id": "17",
+      "category": "Инструменты",
+      "question": "Что такое Garbage Collector в Dart?",
+      "answer": "Dart использует продвинутый Garbage Collector:\n- Generational Garbage Collection (young/old space)\n- Concurrent mark-sweep (не останавливает программу)\n- Incremental compaction (уменьшает фрагментацию)\n- Работает автоматически\n\nМожно вызвать System.gc(), но не рекомендуется.",
+      "hint": "Dart GC: Generational, Concurrent mark-sweep, автоматический"
+    },
+    {
+      "id": "18",
+      "category": "Виджеты",
+      "question": "Что такое Key и зачем он нужен?",
+      "answer": "Key помогает Flutter идентифицировать виджеты при обновлении.\n\nТипы Keys:\n- LocalKey (ValueKey, ObjectKey) - для списков\n- GlobalKey - для уникальной идентификации (доступ к FormState)\n\nБез ключей Flutter может перепутать виджеты при обновлении.",
+      "hint": "Key помогает идентифицировать виджеты, особенно в списках"
+    },
+    {
+      "id": "19",
+      "category": "Пакеты",
+      "question": "Что такое Dio и зачем он нужен?",
+      "answer": "Dio - HTTP клиент для Dart/Flutter. Преимущества перед стандартным http:\n- Interceptors (перехватчики)\n- Cancellation (отмена запросов)\n- Form data поддержка\n- Лучшая обработка ошибок\n- Timeout настройка\n- Логирование запросов",
+      "hint": "Dio - улучшенный HTTP клиент с interceptors, cancellation"
+    },
+    {
+      "id": "20",
+      "category": "Тестирование",
+      "question": "Какие виды тестов есть в Flutter?",
+      "answer": "1. Unit тесты - тестирование отдельных функций/классов\n2. Widget тесты - тестирование виджетов в изоляции\n3. Integration тесты - тестирование всего приложения\n\nИспользуются пакеты:\n- test - для unit тестов\n- flutter_test - для widget тестов\n- integration_test - для интеграционных тестов",
+      "hint": "Unit тесты, Widget тесты, Integration тесты"
     },
     {
       "id": "21",
